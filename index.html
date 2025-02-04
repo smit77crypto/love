@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine ❤️</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffaaaa);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ff3b3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'), auto;
+        }
+
+        /* Floating Hearts Background */
+        .heart {
+            position: absolute;
+            background: #ff3b3b;
+            width: 20px;
+            height: 20px;
+            transform: rotate(-45deg);
+            animation: float 6s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -10px; }
+        .heart::after { left: 10px; }
+
+        @keyframes float {
+            0%, 100% { transform: rotate(-45deg) translateY(0); }
+            50% { transform: rotate(-45deg) translateY(-20px); }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Title */
+        h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff8e8e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 2rem 0;
+            animation: titleBeat 2s infinite;
+        }
+
+        @keyframes titleBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Proposal Box */
+        .proposal-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem 0;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+            transition: transform 0.5s ease;
+        }
+
+        .proposal-box:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+        }
+
+        .proposal-text {
+            font-size: 1.5rem;
+            color: #fff;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Button */
+        .reveal-btn {
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.3rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,59,59,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reveal-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .reveal-btn:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .reveal-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255,59,59,0.5);
+        }
+
+        /* Love Letter */
+        .love-letter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            color: #ff3b3b;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        .love-letter.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .love-letter h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .love-letter p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff3b3b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Reasons List */
+        .reasons-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 1s ease;
+        }
+
+        .reason-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: rotateY(0deg);
+            transition: all 0.5s ease;
+        }
+
+        .reason-card:hover {
+            transform: rotateY(10deg) scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .show-reasons {
+            max-height: 2000px;
+            padding: 2rem 0;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff3b3b;
+            border-radius: 50%;
+            animation: confettiFall 5s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .proposal-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Will You Be My Valentine? 🌹</h1>
+        
+        <div class="proposal-box">
+            <p class="proposal-text">My Dearest Love,</p>
+            <p class="proposal-text">
+                From the moment our hearts connected, I knew you were special. 
+                This Valentine's Day, I want to make it unforgettable. 
+                Will you do me the honor of being my Valentine?
+            </p>
+            <button class="reveal-btn" onclick="revealReasons()">Show My Reasons ❤️</button>
+            <button class="reveal-btn" onclick="openLetter()">Read My Love Letter 💌</button>
+        </div>
+
+        <div class="reasons-list">
+            <div class="reason-card">1. Your smile brightens my darkest days</div>
+            <div class="reason-card">2. Your laughter is my favorite melody</div>
+            <div class="reason-card">3. You inspire me to be my best self</div>
+            <div class="reason-card">4. Your kindness knows no bounds</div>
+            <div class="reason-card">5. You make every moment magical</div>
+            <div class="reason-card">6. Your intelligence leaves me in awe</div>
+            <div class="reason-card">7. You understand me like no one else</div>
+            <div class="reason-card">8. Your passion for life is contagious</div>
+            <div class="reason-card">9. You're my perfect balance</div>
+            <div class="reason-card">10. Your hugs feel like home</div>
+            <div class="reason-card">11. You make ordinary days extraordinary</div>
+            <div class="reason-card">12. Your eyes hold my entire universe</div>
+            <div class="reason-card">13. You love me for who I truly am</div>
+            <div class="reason-card">14. You're my forever and always</div>
+        </div>
+    </div>
+
+    <!-- Love Letter Popup -->
+    <div class="love-letter">
+        <h2>My Love Letter to You 💌</h2>
+        <p>
+            My dearest love,<br><br>
+            Every moment with you feels like a dream. You are the light of my life, the beat of my heart, and the reason I smile every day. I cherish every second we spend together, and I can't wait to create countless more memories with you. Will you be my Valentine, today and forever?<br><br>
+            With all my love,<br>
+            [Your Name]
+        </p>
+        <button class="close-btn" onclick="closeLetter()">×</button>
+    </div>
+
+    <script>
+        function createHearts() {
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.width = heart.style.height = 
+                    Math.random() * 20 + 10 + 'px';
+                document.body.appendChild(heart);
+            }
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.backgroundColor = 
+                    `hsl(${Math.random() * 360}deg, 70%, 60%)`;
+                document.body.appendChild(confetti);
+            }
+        }
+
+        function revealReasons() {
+            document.querySelector('.reasons-list').classList.add('show-reasons');
+            document.querySelector('.reveal-btn').classList.add('hidden');
+            createHearts();
+            createConfetti();
+        }
+
+        function openLetter() {
+            document.querySelector('.love-letter').classList.add('active');
+        }
+
+        function closeLetter() {
+            document.querySelector('.love-letter').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
